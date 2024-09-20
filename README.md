@@ -1,6 +1,6 @@
 # Code Similarity Detection Using Fuzzy Logic
 
-## Overview
+## Overview (January 2024)
 This project implements a system to detect similarity between source code snippets using Abstract Syntax Tree (AST) analysis and textual comparison. A fuzzy logic model integrates these metrics to produce an overall similarity score, assisting in assessing originality and preventing copyright infringement.
 
 ## Features

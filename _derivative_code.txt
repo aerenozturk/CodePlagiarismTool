@@ -1,0 +1,32 @@
+import cv2
+import numpy as np
+
+def detect_park_space(frame, area):
+    mask = np.zeros(frame.shape[:2], dtype="uint8")
+    cv2.polylines(mask, [np.array(area, np.int32)], True, 255, 2)
+    mask = cv2.fillPoly(mask, [np.array(area, np.int32)], 255)
+    masked = cv2.bitwise_and(frame, frame, mask=mask)
+    return np.sum(masked > 0) > 1000
+
+cap = cv2.VideoCapture('parking_video.mp4')
+
+park_area = [(100, 100), (150, 100), (150, 150), (100, 150)]
+
+while True:
+    ret, frame = cap.read()
+    if not ret:
+        break
+
+    frame = cv2.resize(frame, (800, 600))
+
+    if detect_park_space(frame, park_area):
+        cv2.polylines(frame, [np.array(park_area, np.int32)], True, (0, 0, 255), 2)
+    else:
+        cv2.polylines(frame, [np.array(park_area, np.int32)], True, (0, 255, 0), 2)
+
+    cv2.imshow('Park Space Detection', frame)
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
+cap.release()
+cv2.destroyAllWindows()
